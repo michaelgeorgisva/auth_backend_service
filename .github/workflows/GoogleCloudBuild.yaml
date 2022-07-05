@@ -10,7 +10,7 @@ env:
   SERVICE_NAME: backend-service
 
 jobs:
-  setup and build:
+  setup-build:
     name: Setup and Build
     runs-on: ubuntu-latest
     defaults:
