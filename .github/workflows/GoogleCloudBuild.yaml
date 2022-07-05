@@ -1,0 +1,48 @@
+name: Build using Cloud Build
+
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  PROJECT_ID: heroic-arbor-349007
+  SERVICE_NAME: backend-service
+
+jobs:
+  setup and build:
+    name: Setup and Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # If your project is not in the root, please change it to the directory
+        # where there's a Dockerfile.
+        # You can fill it like this.
+        # working-directory: "./some-folder-with-dockerfile"
+        working-directory: "./"
+
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    # Authentication process
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    # Setup gcloud CLI
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+
+    # Build and push image to Google Container Registry
+    - name: Build with Gcloud Build
+      run: |-
+        gcloud builds submit \
+          --quiet \
+          --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:latest" .
