@@ -19,7 +19,7 @@ jobs:
         # where there's a Dockerfile.
         # You can fill it like this.
         # working-directory: "./some-folder-with-dockerfile"
-        working-directory: "./"
+        working-directory: "."
 
     # Add "id-token" with the intended permissions.
     permissions:
